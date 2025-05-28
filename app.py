@@ -9,7 +9,7 @@ from schemas import ProductSchema, CategorySchema
 app = FastAPI()
 
 # allow network request from all servers
-app.add_middleware(CORSMiddleware, allow_origins=["*"])
+app.add_middleware(CORSMiddleware, allow_origins=["*"], allow_methods=["*"])
 
 
 # define routes
@@ -87,3 +87,10 @@ def add_category(category: CategorySchema, db: Session = Depends(get_db)):
     db.commit()
 
     return {"message": "Category created successfully"}
+
+
+@app.get("/categories")
+def get_categories(db: Session = Depends(get_db)):
+    categories = db.query(Category).all()
+
+    return categories
